@@ -3,7 +3,7 @@ button.promise-button(
   type="button",
   @click.stop="handle",
   :disabled="disabled",
-  :class="{ 'promise-button--notext': !isShowText }"
+  :class="{ 'promise-button--notext': !isShowText }",
 )
   span(v-if="isShowText")
     slot
@@ -16,10 +16,10 @@ button.promise-button(
       span.promise-button-visually-hidden Loading...
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed } from 'vue';
 
 interface Props {
-  promise: any;
+  promise: (...args: any[]) => Promise<unknown>;
   autoHide?: boolean;
   disabled?: boolean;
   forceProcessing?: boolean;
@@ -28,10 +28,10 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   autoHide: false,
   disabled: false,
-  forceProcessing: false
-})
+  forceProcessing: false,
+});
 
-const isProcessing = ref(false)
+const isProcessing = ref(false);
 
 const isShowText = computed(() => {
   if (isProcessing.value || props.forceProcessing) {
@@ -39,7 +39,7 @@ const isShowText = computed(() => {
   }
 
   return true;
-})
+});
 
 /**
 * main handle function
@@ -58,9 +58,10 @@ const handle = () => {
   }
 }
 
-// defineExpose({
-//   handle
-// })
+defineExpose({
+  handle,
+  isShowText,
+});
 </script>
 <style lang="sass">
 @import 'bootstrap/scss/functions'
